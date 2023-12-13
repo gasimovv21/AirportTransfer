@@ -20,6 +20,7 @@ router.register(r'users', UserViewSet)
 
 
 urlpatterns = [
+    # path('api/', include('backend_api.urls')),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),

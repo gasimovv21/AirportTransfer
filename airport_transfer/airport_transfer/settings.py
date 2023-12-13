@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'backend_api',
+    'cars',
 ]
 
 REST_FRAMEWORK = {
