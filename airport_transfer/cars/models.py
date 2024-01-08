@@ -3,15 +3,35 @@ from django.db import models
 from django.utils import timezone
 
 class Feature(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        verbose_name='Araç hizmetinin ismi',
+        max_length=255,
+        unique=True
+        )
 
     def __str__(self):
         return self.name
     
     class Meta:
-        ordering = ['name']
-        verbose_name = 'Feature'
-        verbose_name_plural = 'Features'
+        ordering = ['id']
+        verbose_name = 'Araç hizmeti'
+        verbose_name_plural = 'Araç hizmetleri'
+
+
+    # def clean_existing_feature(self):
+    #   """
+    #   Checking the existing feature.
+    #   """
+    #     existing_feature = Feature.objects.filter(name=self.name).first()
+    #     if existing_feature:
+    #         raise ValidationError('Böyle bir hizmet sistemde zaten mevcut!')
+        
+    
+    # def clean(self):
+    #     super().clean()
+    #     self.clean_existing_feature()
+
+    
 
 class Car(models.Model):
     CATEGORY_CHOICES = [
@@ -19,20 +39,46 @@ class Car(models.Model):
         ('Econom', 'Econom'),
     ]
 
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability_date = models.DateField()
-    features = models.ManyToManyField(Feature)
-    image = models.ImageField(upload_to='car_images/', null=True, blank=True)
+    name = models.CharField(
+        verbose_name='Araçin Ismi',
+        max_length=255,
+        blank=False
+    )
+    category = models.CharField(
+        verbose_name='Araçin kategorisi',
+        max_length=100,
+        choices=CATEGORY_CHOICES,
+        blank=False
+    )
+    price = models.DecimalField(
+        verbose_name='Araçin fiyati',
+        max_digits=10,
+        decimal_places=2,
+        blank=False
+    )
+    availability_date = models.DateField(
+        verbose_name='Araçin mevcut tarihi',
+        blank=False
+    )
+    features = models.ManyToManyField(
+        Feature,
+        verbose_name='Araçin ozel hizmeti',
+        blank=False
+    )
+    image = models.ImageField(
+        upload_to='car_images/', 
+        verbose_name='Araçin resmi',
+        null=True, 
+        blank=False
+    )
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['name']
-        verbose_name = 'Car'
-        verbose_name_plural = 'Cars'
+        ordering = ['id']
+        verbose_name = 'Araç'
+        verbose_name_plural = 'Araçlar'
 
     
     def clean_availability_date(self):
@@ -41,7 +87,16 @@ class Car(models.Model):
         """
         if self.availability_date < timezone.now().date():
             raise ValidationError("Kullanılabilirlik tarihi gelecekte olmalıdır.")
-    
+
+
+    # FOR FUTURE EACH CAR MUST HAVE UNIQE CAR_NUMBER Ex: 90-EQ-200, 10-AB-123 and etc.
+    # def clean_existing_car(self):
+    #     existing_cars = Car.objects.filter(name=self.name, category=self.category)
+        
+    #     for car in existing_cars:
+    #         if car.price == self.price:
+    #             raise ValidationError(f"Böyle bir fiyata artik araba var. {self.price}")
+        
     def clean(self):
         super().clean()
         self.clean_availability_date()

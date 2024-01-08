@@ -51,4 +51,4 @@ class CarAdmin(admin.ModelAdmin):
     def display_features(self, obj):
         return ", ".join([feature.name for feature in obj.features.all()])
     
-    display_features.short_description = 'Features'
+    display_features.short_description = 'Arabanin ozel hizmetleri'

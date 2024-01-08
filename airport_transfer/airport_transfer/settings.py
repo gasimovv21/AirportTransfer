@@ -1,7 +1,4 @@
 import os
-
-
-from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +8,6 @@ SECRET_KEY = 'django-insecure-)hvm=u6np=_dm4fw3i%8jl!3!)jgqbz@q!ewlym*bx1=6_30v)
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Change it later
 
@@ -29,7 +25,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'backend_api',
     'cars',
-    'users',
 ]
 
 REST_FRAMEWORK = {
@@ -102,25 +97,3 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'users.User'
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-
-DEFAULT_FROM_EMAIL = 'admin@yamdb.com'
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}
