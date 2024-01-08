@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Feature, Car
+from .models import Feature, Photo, Car
 
 
 @admin.register(Feature)
@@ -16,6 +16,23 @@ class FeatureAdmin(admin.ModelAdmin):
     list_filter = (
         'id',
         'name',
+    )
+    empty_value_display = '-empty-'
+
+
+@admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'image',
+    )
+    search_fields = (
+        'id',
+        'image',
+    )
+    list_filter = (
+        'id',
+        'image',
     )
     empty_value_display = '-empty-'
 

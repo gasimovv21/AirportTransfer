@@ -1,6 +1,10 @@
+import os
+
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+
 
 class Feature(models.Model):
     name = models.CharField(
@@ -9,13 +13,34 @@ class Feature(models.Model):
         unique=True
         )
 
+
     def __str__(self):
         return self.name
-    
+
+
     class Meta:
         ordering = ['id']
         verbose_name = 'Araç hizmeti'
         verbose_name_plural = 'Araç hizmetleri'
+
+
+class Photo(models.Model):
+    image = models.ImageField(
+        upload_to='car_images_album/', 
+        verbose_name='Araç resmi',
+        null=True, 
+        blank=False
+    )
+
+
+    def __str__(self):
+        return os.path.basename(str(self.image))
+
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Araçlarin albüm resimi'
+        verbose_name_plural = 'Araçin albüm resimleri'
 
 
     # def clean_existing_feature(self):
@@ -71,16 +96,23 @@ class Car(models.Model):
         null=True, 
         blank=False
     )
+    photo_album = models.ManyToManyField(
+        'Photo',
+        verbose_name='Araçin foto albümü',
+        blank=True
+    )
+
 
     def __str__(self):
         return self.name
+
 
     class Meta:
         ordering = ['id']
         verbose_name = 'Araç'
         verbose_name_plural = 'Araçlar'
 
-    
+
     def clean_availability_date(self):
         """
         Checking data in future not in past.
@@ -96,7 +128,8 @@ class Car(models.Model):
     #     for car in existing_cars:
     #         if car.price == self.price:
     #             raise ValidationError(f"Böyle bir fiyata artik araba var. {self.price}")
-        
+
+
     def clean(self):
         super().clean()
         self.clean_availability_date()
