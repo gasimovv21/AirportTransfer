@@ -5,7 +5,7 @@ from cars.models import Feature, Photo, Car
 class FeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feature
-        fields = ['name']
+        fields = ['name', 'icon']
 
 
 class PhotoSerializer(serializers.ModelSerializer):

@@ -11,12 +11,22 @@ class Feature(models.Model):
         verbose_name='Araç hizmetinin ismi',
         max_length=255,
         unique=True
-        )
+    )
+    icon = models.CharField(
+        verbose_name='Icon',
+        max_length=255,
+        default='',  # По умолчанию устанавливаем пустую строку, вы можете изменить на другое значение
+        blank=True,  # Разрешаем оставить поле пустым
+    )
 
+    def save(self, *args, **kwargs):
+        # Если поле icon не было явно установлено, устанавливаем его равным значению поля name
+        if not self.icon:
+            self.icon = self.name
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
-
 
     class Meta:
         ordering = ['id']

@@ -8,14 +8,17 @@ class FeatureAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
+        'icon',
     )
     search_fields = (
         'id',
         'name',
+        'icon',
     )
     list_filter = (
         'id',
         'name',
+        'icon',
     )
     empty_value_display = '-empty-'
 
