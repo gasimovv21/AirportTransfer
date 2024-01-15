@@ -12,17 +12,17 @@ class Feature(models.Model):
         max_length=255,
         unique=True
     )
-    icon = models.CharField(
+    icon = models.FileField(
         verbose_name='Icon',
-        max_length=255,
-        default='',  # По умолчанию устанавливаем пустую строку, вы можете изменить на другое значение
-        blank=True,  # Разрешаем оставить поле пустым
+        upload_to='icons/',  # Папка для сохранения загруженных файлов
+        blank=True,
+        null=True,
     )
 
     def save(self, *args, **kwargs):
         # Если поле icon не было явно установлено, устанавливаем его равным значению поля name
         if not self.icon:
-            self.icon = self.name
+            self.icon = f'icons/{self.name}.png'  # Можете изменить расширение файла на нужное
         super().save(*args, **kwargs)
 
     def __str__(self):
