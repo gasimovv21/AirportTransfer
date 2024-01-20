@@ -1,5 +1,6 @@
+from django.conf import settings
 from rest_framework import serializers
-from cars.models import Feature, Photo, Car
+from cars.models import Feature, Photo, Car, Location
 
 
 class FeatureSerializer(serializers.ModelSerializer):
@@ -14,13 +15,28 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = ['image']
 
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        if request is not None:
+            return request.build_absolute_uri(instance.image.url)
+        else:
+            # Если request отсутствует в контексте, используйте настройки Django
+            return settings.MEDIA_URL + instance.image.url
+
 
 class CarSerializer(serializers.ModelSerializer):
     features = FeatureSerializer(many=True)
+    photo_album = PhotoSerializer(many=True)
 
     class Meta:
         model = Car
         fields = ['id', 'name', 'category', 'price', 'availability_date', 'features', 'image', 'photo_album']
 
-    def get_photo_album(self, obj):
-        return [photo['image'] for photo in PhotoSerializer(obj.photo_album.all(), many=True).data]
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['name']
+
+    def to_representation(self, instance):
+        return instance.name

@@ -109,9 +109,10 @@ class Car(models.Model):
         blank=False
     )
     photo_album = models.ManyToManyField(
-        'Photo',
+        Photo,
         verbose_name='Araçin foto albümü',
-        blank=True
+        blank=True,
+        related_name='cars'
     )
 
 
@@ -145,3 +146,10 @@ class Car(models.Model):
     def clean(self):
         super().clean()
         self.clean_availability_date()
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
