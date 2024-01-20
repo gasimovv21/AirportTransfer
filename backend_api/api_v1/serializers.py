@@ -15,14 +15,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = ['image']
 
-    def to_representation(self, instance):
-        request = self.context.get('request')
-        if request is not None:
-            return request.build_absolute_uri(instance.image.url)
-        else:
-            # Если request отсутствует в контексте, используйте настройки Django
-            return settings.MEDIA_URL + instance.image.url
-
 
 class CarSerializer(serializers.ModelSerializer):
     features = FeatureSerializer(many=True)
